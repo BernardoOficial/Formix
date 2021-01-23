@@ -9,7 +9,7 @@ class App extends Component {
 
   render() {
     return (
-      <Container maxWidth="sm">
+      <Container component="article" maxWidth="sm">
         <h1 className="form__title">Formulário de Cadastro</h1>
         <FormularioCadastro />
       </Container>
