@@ -11,10 +11,14 @@ class App extends Component {
     return (
       <Container component="article" maxWidth="sm">
         <h1 className="form__title">Formulário de Cadastro</h1>
-        <FormularioCadastro />
+        <FormularioCadastro enviarDados={enviarDados} />
       </Container>
     );
   }
+}
+
+function enviarDados(dados) {
+  console.log(dados);
 }
 
 export default App;

@@ -1,29 +1,35 @@
 import React, { useState } from 'react';
 import { Box, Button, TextField, Switch, FormControlLabel } from '@material-ui/core'
 
-function FormularioCadastro() {
+function FormularioCadastro({ enviarDados }) {
 
     const [nome, setNome] = useState("");
     const [sobrenome, setSobrenome] = useState("");
     const [cpf, setCPF] = useState("");
+    const [promocoes, setPromocoes] = useState(true);
+    const [novidades, setNovidades] = useState(true);
 
     function handleInputChange(evento) {
         const nomeInserido = evento.target.form.nome.value;
         const sobrenomeInserido = evento.target.form.sobrenome.value;
         const cpfInserido = evento.target.form.cpf.value;
+        const isCheckboxPromocoes = evento.target.form.promocoes.checked;
+        const isCheckboxNovidades = evento.target.form.novidades.checked;
 
         setNome(nomeInserido);
         setSobrenome(sobrenomeInserido);
         setCPF(cpfInserido);
+        setPromocoes(isCheckboxPromocoes);
+        setNovidades(isCheckboxNovidades);
     }
 
-    function enviarDados(evento) {
+    function handleFormSubmit(evento) {
         evento.preventDefault();
-        console.log(nome, sobrenome, cpf);
+        enviarDados({ nome, sobrenome, cpf, promocoes, novidades });
     }
 
     return (
-        <form onSubmit={enviarDados}>
+        <form onSubmit={handleFormSubmit}>
             <TextField
                 id="nome"
                 name="nome"
@@ -69,6 +75,8 @@ function FormularioCadastro() {
                     <Switch
                         name="promocoes"
                         color="primary"
+                        checked={promocoes}
+                        onChange={handleInputChange}
                     />
                 }
             />
@@ -79,6 +87,8 @@ function FormularioCadastro() {
                     <Switch
                         name="novidades"
                         color="primary"
+                        checked={novidades}
+                        onChange={handleInputChange}
                     />
                 }
             />
