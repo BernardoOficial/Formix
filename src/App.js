@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import FormularioCadastro from './components/FormularioCadastro';
 
 import Container from '@material-ui/core/Container'

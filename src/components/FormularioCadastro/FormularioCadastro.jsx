@@ -1,33 +1,66 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Button, TextField, Switch, FormControlLabel } from '@material-ui/core'
 
 function FormularioCadastro() {
 
+    const [nome, setNome] = useState("");
+    const [sobrenome, setSobrenome] = useState("");
+    const [cpf, setCPF] = useState("");
+
+    function handleInputChange(evento) {
+        const nomeInserido = evento.target.form.nome.value;
+        const sobrenomeInserido = evento.target.form.sobrenome.value;
+        const cpfInserido = evento.target.form.cpf.value;
+
+        setNome(nomeInserido);
+        setSobrenome(sobrenomeInserido);
+        setCPF(cpfInserido);
+    }
+
+    function enviarDados(evento) {
+        evento.preventDefault();
+        console.log(nome, sobrenome, cpf);
+    }
+
     return (
-        <form>
+        <form onSubmit={enviarDados}>
             <TextField
-                id="outlined-basic"
+                id="nome"
+                name="nome"
                 label="Nome"
                 variant="outlined"
                 autoFocus={true}
                 fullWidth
                 margin="normal"
+                value={nome}
+
+                onChange={handleInputChange}
             />
 
             <TextField
-                id="outlined-basic"
+                id="sobrenome"
+                name="sobrenome"
                 label="Sobrenome"
                 variant="outlined"
                 fullWidth
                 margin="normal"
+
+                value={sobrenome}
+
+                onChange={handleInputChange}
             />
 
             <TextField
-                id="outlined-basic"
+                id="cpf"
+                name="cpf"
                 label="CPF"
                 variant="outlined"
                 fullWidth
                 margin="normal"
+
+                value={cpf}
+
+                onChange={handleInputChange}
             />
 
             <FormControlLabel
