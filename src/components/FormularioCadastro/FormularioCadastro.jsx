@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import { Box, Button, TextField, Switch, FormControlLabel } from '@material-ui/core'
 
-function FormularioCadastro({ enviarDados }) {
+function FormularioCadastro({ enviarDados, validarCPF }) {
 
     const [nome, setNome] = useState("");
     const [sobrenome, setSobrenome] = useState("");
     const [cpf, setCPF] = useState("");
     const [promocoes, setPromocoes] = useState(true);
     const [novidades, setNovidades] = useState(true);
+    const [erros, setErros] = useState({
+        cpf: {
+            temErro: false,
+            textoAjuda: ""
+        }
+    })
 
     function handleInputChange(evento) {
         const nomeInserido = evento.target.form.nome.value;
@@ -21,6 +27,11 @@ function FormularioCadastro({ enviarDados }) {
         setCPF(cpfInserido);
         setPromocoes(isCheckboxPromocoes);
         setNovidades(isCheckboxNovidades);
+    }
+
+    function handleInputBlur() {
+
+        setErros({ cpf: validarCPF(cpf) });
     }
 
     function handleFormSubmit(evento) {
@@ -65,8 +76,12 @@ function FormularioCadastro({ enviarDados }) {
                 margin="normal"
 
                 value={cpf}
-
                 onChange={handleInputChange}
+                onBlur={handleInputBlur}
+
+
+                error={erros.cpf.temErro}
+                helperText={erros.cpf.textoAjuda}
             />
 
             <FormControlLabel
