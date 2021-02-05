@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
-import { Box, Button, TextField, Switch, FormControlLabel } from '@material-ui/core'
+import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  TextField,
+  Switch,
+  FormControlLabel,
+} from "@material-ui/core";
 
-function DadosPessoais({ enviarDados, validarCPF, voltarEtapa }) {
+function DadosPessoais({ enviarDados, validacoes, voltarEtapa }) {
   const [nome, setNome] = useState("");
   const [sobrenome, setSobrenome] = useState("");
   const [cpf, setCPF] = useState("");
@@ -9,6 +15,10 @@ function DadosPessoais({ enviarDados, validarCPF, voltarEtapa }) {
   const [novidades, setNovidades] = useState(true);
   const [erros, setErros] = useState({
     cpf: {
+      temErro: false,
+      textoAjuda: "",
+    },
+    nome: {
       temErro: false,
       textoAjuda: "",
     },
@@ -28,13 +38,24 @@ function DadosPessoais({ enviarDados, validarCPF, voltarEtapa }) {
     setNovidades(isCheckboxNovidades);
   }
 
-  function handleInputBlur() {
-    setErros({ cpf: validarCPF(cpf) });
+  function handleInputBlur(evento) {
+    const { name, value } = evento.target;
+    const novoEstado = { ...erros };
+    novoEstado[name] = validacoes[name](value);
+    setErros(novoEstado);
   }
 
   function handleFormSubmit(evento) {
     evento.preventDefault();
     enviarDados({ nome, sobrenome, cpf, promocoes, novidades });
+  }
+
+  function possoEnviar() {
+    // Verifica com some um condição se ao menos um campo tem erro,
+    // se tem erro retorna true, se não retorna false
+    // Para o button fica disabled={true ou false}
+    return Object.keys(erros)
+      .some((erro) => erros[erro].temErro === true);
   }
 
   return (
@@ -49,6 +70,9 @@ function DadosPessoais({ enviarDados, validarCPF, voltarEtapa }) {
         margin="normal"
         value={nome}
         onChange={handleInputChange}
+        onBlur={handleInputBlur}
+        error={erros.nome.temErro}
+        helperText={erros.nome.textoAjuda}
       />
 
       <TextField
@@ -101,7 +125,13 @@ function DadosPessoais({ enviarDados, validarCPF, voltarEtapa }) {
       />
 
       <Box mt={5}>
-        <Button type="submit" variant="contained" color="primary" fullWidth>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          fullWidth
+          disabled={possoEnviar()}
+        >
           Próxima Etapa
         </Button>
       </Box>

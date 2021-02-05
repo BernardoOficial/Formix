@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import DadosEntrega from "./DadosEntrega";
 import DadosPessoais from "./DadosPessoais";
 import DadosUsuario from "./DadosUsuario";
-import CadastroConcluido from './CadastroConcluido';
+import CadastroConcluido from "./CadastroConcluido";
 
-import {StepLabel, Step, Stepper} from '@material-ui/core';
+import { StepLabel, Step, Stepper } from "@material-ui/core";
 
-function FormularioCadastro({ enviarDados, validarCPF }) {
+function FormularioCadastro({ enviarDados, validacoes }) {
   const [etapaAtual, setEtapaAtual] = useState(0);
   const [dadosColetados, setDadosColetados] = useState({});
 
@@ -24,31 +24,44 @@ function FormularioCadastro({ enviarDados, validarCPF }) {
   }
 
   const formularios = [
-    <DadosUsuario enviarDados={coletarDados} />,
+    <DadosUsuario enviarDados={coletarDados} validacoes={validacoes} />,
     <DadosPessoais
       enviarDados={coletarDados}
-      validarCPF={validarCPF}
+      validacoes={validacoes}
       voltarEtapa={voltarEtapa}
     />,
-    <DadosEntrega enviarDados={coletarDados} voltarEtapa={voltarEtapa} />,
+    <DadosEntrega
+      enviarDados={coletarDados}
+      voltarEtapa={voltarEtapa}
+      validacoes={validacoes}
+    />,
     <CadastroConcluido
       enviarDados={enviarDados}
       voltarEtapa={voltarEtapa}
+      validacoes={validacoes}
       dadosColetados={dadosColetados}
     />,
   ];
 
-  return(
-      <>
-      <Stepper activeStep={etapaAtual} >
-        <Step><StepLabel>Login</StepLabel></Step>
-        <Step><StepLabel>Pessoal</StepLabel></Step>
-        <Step><StepLabel>Endereço</StepLabel></Step>
-        <Step><StepLabel>Finalização</StepLabel></Step>
+  return (
+    <>
+      <Stepper activeStep={etapaAtual}>
+        <Step>
+          <StepLabel>Login</StepLabel>
+        </Step>
+        <Step>
+          <StepLabel>Pessoal</StepLabel>
+        </Step>
+        <Step>
+          <StepLabel>Endereço</StepLabel>
+        </Step>
+        <Step>
+          <StepLabel>Finalização</StepLabel>
+        </Step>
       </Stepper>
       {formularios[etapaAtual]}
-      </>
-  );;
+    </>
+  );
 }
 
 export default FormularioCadastro;
