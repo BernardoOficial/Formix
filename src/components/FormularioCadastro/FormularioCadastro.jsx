@@ -1,35 +1,54 @@
-import React, { useState } from 'react';
-import DadosEntrega from './DadosEntrega';
-import DadosPessoais from './DadosPessoais';
-import DadosUsuario from './DadosUsuario';
+import React, { useState } from "react";
+import DadosEntrega from "./DadosEntrega";
+import DadosPessoais from "./DadosPessoais";
+import DadosUsuario from "./DadosUsuario";
+import CadastroConcluido from './CadastroConcluido';
+
+import {StepLabel, Step, Stepper} from '@material-ui/core';
 
 function FormularioCadastro({ enviarDados, validarCPF }) {
+  const [etapaAtual, setEtapaAtual] = useState(0);
+  const [dadosColetados, setDadosColetados] = useState({});
 
-    const [etapaAtual, setEtapaAtual] = useState(0);
+  function coletarDados(dados) {
+    setDadosColetados({ ...dadosColetados, ...dados });
+    uptadeEtapa();
+  }
 
-    function uptadeEtapa() {
-        setEtapaAtual(etapaAtual + 1);
-    }
+  function uptadeEtapa() {
+    setEtapaAtual(etapaAtual + 1);
+  }
 
-    function selecionarFormulario(etapa) {
-        
-        switch(etapa) {
-            case 0:
-                return <DadosUsuario uptadeEtapa={uptadeEtapa} />
-            case 1:
-                return <DadosPessoais enviarDados={enviarDados} validarCPF={validarCPF} />
-            case 2:
-                return <DadosEntrega />
-            default:
-                console.error("Falha ao selecionar o Formulário");
-        }
-    }
+  function voltarEtapa() {
+    setEtapaAtual(etapaAtual - 1);
+  }
 
-    return (
-        <>
-            {selecionarFormulario(etapaAtual)}
-        </>
-    )
+  const formularios = [
+    <DadosUsuario enviarDados={coletarDados} />,
+    <DadosPessoais
+      enviarDados={coletarDados}
+      validarCPF={validarCPF}
+      voltarEtapa={voltarEtapa}
+    />,
+    <DadosEntrega enviarDados={coletarDados} voltarEtapa={voltarEtapa} />,
+    <CadastroConcluido
+      enviarDados={enviarDados}
+      voltarEtapa={voltarEtapa}
+      dadosColetados={dadosColetados}
+    />,
+  ];
+
+  return(
+      <>
+      <Stepper activeStep={etapaAtual} >
+        <Step><StepLabel>Login</StepLabel></Step>
+        <Step><StepLabel>Pessoal</StepLabel></Step>
+        <Step><StepLabel>Endereço</StepLabel></Step>
+        <Step><StepLabel>Finalização</StepLabel></Step>
+      </Stepper>
+      {formularios[etapaAtual]}
+      </>
+  );;
 }
 
 export default FormularioCadastro;
