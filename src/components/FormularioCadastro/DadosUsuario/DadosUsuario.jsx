@@ -1,34 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Box, Button, TextField } from "@material-ui/core";
+import ValidacoesCadastro from "../../../contexts/ValidacoesCadastro";
+import useErros from "../../../hooks/useErros";
 
-function DadosUsuario({ enviarDados, validacoes }) {
+function DadosUsuario({ enviarDados }) {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [erros, setErros] = useState({
-    senha: {
-      temErro: false,
-      textoAjuda: "",
-    },
-  });
-
-  function possoEnviar() {
-    // Verifica com some um condição se ao menos um campo tem erro,
-    // se tem erro retorna true, se não retorna false
-    // Para o button fica disabled={true ou false}
-    return Object.keys(erros)
-      .some((erro) => erros[erro].temErro === true);
-  }
+  const validacoes = useContext(ValidacoesCadastro);
+  const [erros, handleInputBlur, possoEnviar] = useErros(validacoes);
 
   function handleFormSubmit(evento) {
     evento.preventDefault();
     enviarDados({ email, senha });
-  }
-
-  function handleInputBlur(evento) {
-    const { name, value } = evento.target;
-    const novoEstado = { ...erros };
-    novoEstado[name] = validacoes[name](value);
-    setErros(novoEstado);
   }
 
   function handleInputChange(evento) {

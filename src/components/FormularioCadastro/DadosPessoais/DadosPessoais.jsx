@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import ValidacoesCadastro from '../../../contexts/ValidacoesCadastro'
+import useErros from "../../../hooks/useErros";
 import {
   Box,
   Button,
@@ -7,22 +9,16 @@ import {
   FormControlLabel,
 } from "@material-ui/core";
 
-function DadosPessoais({ enviarDados, validacoes, voltarEtapa }) {
+
+function DadosPessoais({ enviarDados, voltarEtapa }) {
   const [nome, setNome] = useState("");
   const [sobrenome, setSobrenome] = useState("");
   const [cpf, setCPF] = useState("");
   const [promocoes, setPromocoes] = useState(true);
   const [novidades, setNovidades] = useState(true);
-  const [erros, setErros] = useState({
-    cpf: {
-      temErro: false,
-      textoAjuda: "",
-    },
-    nome: {
-      temErro: false,
-      textoAjuda: "",
-    },
-  });
+  const validacoes = useContext(ValidacoesCadastro);
+  const [erros, handleInputBlur, possoEnviar] = useErros(validacoes);
+
 
   function handleInputChange(evento) {
     const nomeInserido = evento.target.form.nome.value;
@@ -38,24 +34,9 @@ function DadosPessoais({ enviarDados, validacoes, voltarEtapa }) {
     setNovidades(isCheckboxNovidades);
   }
 
-  function handleInputBlur(evento) {
-    const { name, value } = evento.target;
-    const novoEstado = { ...erros };
-    novoEstado[name] = validacoes[name](value);
-    setErros(novoEstado);
-  }
-
   function handleFormSubmit(evento) {
     evento.preventDefault();
     enviarDados({ nome, sobrenome, cpf, promocoes, novidades });
-  }
-
-  function possoEnviar() {
-    // Verifica com some um condição se ao menos um campo tem erro,
-    // se tem erro retorna true, se não retorna false
-    // Para o button fica disabled={true ou false}
-    return Object.keys(erros)
-      .some((erro) => erros[erro].temErro === true);
   }
 
   return (

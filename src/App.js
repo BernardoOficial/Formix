@@ -5,16 +5,22 @@ import Container from "@material-ui/core/Container";
 import { validarCPF, validarSenha, validarNome } from "./models/cadastro";
 
 import "./App.css";
+import ValidacoesCadastro from "./contexts/ValidacoesCadastro";
 
 class App extends Component {
   render() {
     return (
       <Container component="article" maxWidth="sm">
         <h1 className="form__title">Formulário de Cadastro</h1>
-        <FormularioCadastro
-          enviarDados={enviarDados}
-          validacoes={{ cpf: validarCPF, senha: validarSenha, nome: validarNome }}
-        />
+        <ValidacoesCadastro.Provider
+          value={{
+            cpf: validarCPF,
+            senha: validarSenha,
+            nome: validarNome,
+          }}
+        >
+          <FormularioCadastro enviarDados={enviarDados} />
+        </ValidacoesCadastro.Provider>
       </Container>
     );
   }

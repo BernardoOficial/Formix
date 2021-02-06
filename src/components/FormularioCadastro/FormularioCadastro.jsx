@@ -6,7 +6,7 @@ import CadastroConcluido from "./CadastroConcluido";
 
 import { StepLabel, Step, Stepper } from "@material-ui/core";
 
-function FormularioCadastro({ enviarDados, validacoes }) {
+function FormularioCadastro({ enviarDados }) {
   const [etapaAtual, setEtapaAtual] = useState(0);
   const [dadosColetados, setDadosColetados] = useState({});
 
@@ -24,21 +24,18 @@ function FormularioCadastro({ enviarDados, validacoes }) {
   }
 
   const formularios = [
-    <DadosUsuario enviarDados={coletarDados} validacoes={validacoes} />,
+    <DadosUsuario enviarDados={coletarDados} />,
     <DadosPessoais
       enviarDados={coletarDados}
-      validacoes={validacoes}
       voltarEtapa={voltarEtapa}
     />,
     <DadosEntrega
       enviarDados={coletarDados}
       voltarEtapa={voltarEtapa}
-      validacoes={validacoes}
     />,
     <CadastroConcluido
       enviarDados={enviarDados}
       voltarEtapa={voltarEtapa}
-      validacoes={validacoes}
       dadosColetados={dadosColetados}
     />,
   ];
