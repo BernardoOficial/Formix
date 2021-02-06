@@ -5,10 +5,12 @@ import DadosUsuario from "./DadosUsuario";
 import CadastroConcluido from "./CadastroConcluido";
 
 import { StepLabel, Step, Stepper } from "@material-ui/core";
+import { Player } from '@lottiefiles/react-lottie-player';
 
 function FormularioCadastro({ enviarDados }) {
   const [etapaAtual, setEtapaAtual] = useState(0);
   const [dadosColetados, setDadosColetados] = useState({});
+  const [loader, setLoader] = useState(false);
 
   function coletarDados(dados) {
     setDadosColetados({ ...dadosColetados, ...dados });
@@ -17,6 +19,11 @@ function FormularioCadastro({ enviarDados }) {
 
   function uptadeEtapa() {
     setEtapaAtual(etapaAtual + 1);
+    setLoader(true);
+
+    setInterval(() => {
+      setLoader(false);
+    }, 2000)
   }
 
   function voltarEtapa() {
@@ -56,7 +63,17 @@ function FormularioCadastro({ enviarDados }) {
           <StepLabel>Finalização</StepLabel>
         </Step>
       </Stepper>
-      {formularios[etapaAtual]}
+      {loader || formularios[etapaAtual]}
+      {loader && (
+        <Player
+          src="https://assets9.lottiefiles.com/packages/lf20_uwR49r.json"
+          background="transparent"
+          speed="1"
+          style={{width: '300px', height: '300px'}}
+          loop
+          autoplay
+        />
+      )}
     </>
   );
 }
